@@ -16,9 +16,10 @@ class SimpleWorkflowAPIComponent extends Component
     {
         $this->DAL->initialize($controller);
     }
-    public function GetNextActions()
+
+    public function GetNextActions($workflow_id, $user_id)
     {
-        print_r($this->DAL->GetAllWorkflowActions());
+        return $this->DAL->GetAllWorkflowActions($workflow_id, $user_id);
     }
 
     public function RegisterCompletedAction()

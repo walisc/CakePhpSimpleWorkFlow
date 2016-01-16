@@ -15,7 +15,7 @@ class UserWorkflowActions extends SimpleWorkflowAppModel
 
 
     public $belongsTo = array(
-        'UWA_WA' => array(
+        'USER_WA_ACTION' => array(
             'className' => 'SimpleWorkflow.WorkflowActions',
             'foreignKey' => 'workflow_action_ref'
         )
