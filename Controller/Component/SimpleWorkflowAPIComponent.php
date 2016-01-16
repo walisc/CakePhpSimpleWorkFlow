@@ -10,11 +10,15 @@ App::uses('Component', 'Controller');
 
 class SimpleWorkflowAPIComponent extends Component
 {
-    public $components = array('QuickEmailer.DAL');
+    public $components = array('SimpleWorkflow.DAL');
 
+    public function initialize(Controller $controller)
+    {
+        $this->DAL->initialize($controller);
+    }
     public function GetNextActions()
     {
-        echo "hellow";
+        print_r($this->DAL->GetAllWorkflowActions());
     }
 
     public function RegisterCompletedAction()

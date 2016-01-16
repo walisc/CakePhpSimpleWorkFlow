@@ -6,5 +6,5 @@
  * Time: 4:35 PM
  */
 
-Configure::write("simple_workflow.dbconfig",'default');
+Configure::write("SimpleWorkflow.dbconfig",'connecting_workflow');
 

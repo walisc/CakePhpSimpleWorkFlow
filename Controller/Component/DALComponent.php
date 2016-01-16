@@ -6,88 +6,22 @@
  * Time: 9:38 PM
  */
 
-App::uses('QuickEmailerBaseComponent', 'Plugin/QuickEmailer/Controller/Component');
-App::uses('ConnectionManager', 'Model');
-App::uses('Model','Model');
+App::uses('Component', 'Controller');
 
-class DALComponent extends QuickEmailerBaseComponent
+class DALComponent extends Component
 {
-
-    public function load()
+    public function initialize(Controller $controller)
     {
-        if (Cache::read('simple_workflow.dbconfig_' . hash("md5", "simple_workflow_dbconfig"), QEResp::QUICK_EMAILER_CACHE ))
-        {
-            return true;
-        }
+        parent::initialize($controller);
 
-        if (Configure::check('qe.dbconfig'))
-        {
-            if (!file_exists(APP . 'Config' . DS . 'database.php'))
-            {
-                return QEResp::RESPOND(QEResp::ERROR, QuickEmailerErrorDefinitions::NO_DATABASE_CONFIGURED());
-            }
-            try
-            {
-                $datasource = ConnectionManager::getDataSource(Configure::read('qe.dbconfig'));
-
-                if ($datasource->connected) {
-
-                    $this->CheckTables($datasource);
-                    Cache::write('qe.dbconfig_' . hash("md5", "qe_dbconfig"), true, QEResp::QUICK_EMAILER_CACHE );
-                    return true;
-                }
-                return QEResp::RESPOND(QEResp::ERROR, QuickEmailerErrorDefinitions::NO_DATABASE_CONFIGURED());
-            }
-            Catch (Exception $e)
-            {
-                $excep_message = QuickEmailerResponseHandler::AddExceptionInfo(QuickEmailerErrorDefinitions::NO_DATABASE_CONFIGURED(),$e);
-                //TODO: Log errors
-                return QEResp::RESPOND(QEResp::ERROR, $excep_message);
-            }
-
-        }
-        else
-        {
-            return QEResp::RESPOND(QEResp::ERROR, QuickEmailerErrorDefinitions::NO_DATABASE_CONFIGURED());
-        }
+        $this->UserWorkflowActions = ClassRegistry::init('SimpleWorkflow.UserWorkflowActions');
+        $this->UserWorkflowActions->setDataSource(Configure::read("SimpleWorkflow.dbconfig"));
 
     }
 
-
-    private function CheckTables($datasource)
+    public function GetAllWorkflowActions()
     {
-        $quickEmailerTable = array('Templates', 'Emails');
-        $availableTables = $datasource->listSources();
-
-        foreach ($quickEmailerTable as $table)
-        {
-            if(!in_array($table, $availableTables) )
-            {
-                echo 'Creating new one';
-                $datasource->rawQuery("CREATE TABLE Persons
-                                    (
-                                    PersonID int,
-                                    LastName varchar(255),
-                                    FirstName varchar(255),
-                                    Address varchar(255),
-                                    City varchar(255)
-                                    );");
-
-                //TODO: log creating new one
-            }
-        }
-
-
-    }
-    public function SaveTemplate($template_name, $template_body)
-    {
-        $newTemplate = array(
-            "date_saved" => date('Y-m-d H:i:s'),
-            "template_name" => $template_name,
-            "template_body" => $template_body
-        );
-
-        $this->Templates->save($newTemplate);
+        return $this->UserWorkflowActions->find("all");
     }
 }
 
