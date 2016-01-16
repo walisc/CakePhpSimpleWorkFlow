@@ -12,4 +12,13 @@ App::uses("SimpleWorkflowAppModel","Plugin/SimpleWorkflow/Model");
 class UserWorkflowActions extends SimpleWorkflowAppModel
 {
     public $useTable = "t_user_workflow_actions";
+
+
+    public $belongsTo = array(
+        'UWA_WA' => array(
+            'className' => 'SimpleWorkflow.WorkflowActions',
+            'foreignKey' => 'workflow_action_ref'
+        )
+    );
+
 }

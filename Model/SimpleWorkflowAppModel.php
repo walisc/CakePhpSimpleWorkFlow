@@ -11,5 +11,9 @@ App::uses("AppModel","Model");
 
 class SimpleWorkflowAppModel extends AppModel
 {
-
+    public function __construct($id = false, $table = null, $ds = null)
+    {
+        parent::__construct();
+        $this->useDbConfig = Configure::read("SimpleWorkflow.dbconfig");
+    }
 }

@@ -14,8 +14,8 @@ class DALComponent extends Component
     {
         parent::initialize($controller);
 
+        $this->WorkflowActions = ClassRegistry::init('SimpleWorkflow.WorkflowActions');
         $this->UserWorkflowActions = ClassRegistry::init('SimpleWorkflow.UserWorkflowActions');
-        $this->UserWorkflowActions->setDataSource(Configure::read("SimpleWorkflow.dbconfig"));
 
     }
 

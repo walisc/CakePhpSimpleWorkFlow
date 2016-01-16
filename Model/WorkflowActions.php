@@ -12,4 +12,5 @@ App::uses("SimpleWorkflowAppModel","Plugin/SimpleWorkflow/Model");
 class WorkflowActions extends SimpleWorkflowAppModel
 {
     public $useTable = "t_workflow_actions";
+
 }
